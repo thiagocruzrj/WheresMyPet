@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "418761273948",
+    "firebase_url": "https://wheresmypet-63100.firebaseio.com",
+    "project_id": "wheresmypet-63100",
+    "storage_bucket": "wheresmypet-63100.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:418761273948:android:95360e0d70f414c3",
+        "android_client_info": {
+          "package_name": "com.study.wheresmypet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "418761273948-ntrqtik33khhnfqqpj2pj9vv1hsgvas7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.study.wheresmypet",
+            "certificate_hash": "5c55b555e361758780bca74cd15d6d6f6e77e027"
+          }
+        },
+        {
+          "client_id": "418761273948-ifum4gos41hm288oem5gc1fb3jfs0op4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAN3BSagf-jMZU3btf89XUs85bZczQqWFo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "418761273948-ifum4gos41hm288oem5gc1fb3jfs0op4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
