@@ -6,6 +6,7 @@
     tools:context=".fragment.FeedFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/feed_recicle_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="15sp"
