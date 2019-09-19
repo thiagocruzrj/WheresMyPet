@@ -1,9 +1,17 @@
 package com.study.wheresmypet.model;
 
+import android.util.Log;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import com.study.wheresmypet.adapter.AnimalAdapter;
 import com.study.wheresmypet.helper.UserFirebase;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Pet implements Serializable {
@@ -16,13 +24,48 @@ public class Pet implements Serializable {
     private String telefone;
     private List<String> fotos;
 
+    ArrayList<Pet> tempPetsList = new ArrayList<>();
+
+
+    public ArrayList<Pet> loadPets(final AnimalAdapter animalAdapter) {
+
+        DatabaseReference petDbReference = UserFirebase.getFirebase()
+                .child("meus_pets");
+
+        petDbReference.addValueEventListener(new ValueEventListener() {
+            Pet tempPet = new Pet();
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.w("test", dataSnapshot.toString());
+                Iterator<DataSnapshot> dataSnapshotIterator = dataSnapshot.getChildren().iterator();
+
+                while (dataSnapshotIterator.hasNext()) {
+                    DataSnapshot child = dataSnapshotIterator.next();
+                    tempPet = child.getChildren().iterator().next().getValue(Pet.class);
+                    tempPetsList.add(tempPet);
+                }
+
+                animalAdapter.setMyAnimals(tempPetsList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("test", "Failed to read value.", error.toException());
+            }
+        });
+
+        return tempPetsList;
+    }
+
     public Pet() {
         DatabaseReference petRef = UserFirebase.getFirebase()
                 .child("meus_pets");
         setIdPet(petRef.push().getKey());
     }
 
-    public void salvar(){
+    public void salvar() {
         String idUsuario = UserFirebase.getIdUsuario();
         DatabaseReference petRef = UserFirebase.getFirebase()
                 .child("meus_pets");
@@ -34,6 +77,7 @@ public class Pet implements Serializable {
         salvarAnuncioPetPublico();
     }
 
+
     private void salvarAnuncioPetPublico() {
         DatabaseReference petAnuncioRef = UserFirebase.getFirebase()
                 .child("anuncios");
@@ -44,7 +88,7 @@ public class Pet implements Serializable {
                 .setValue(this);
     }
 
-    public void remover(){
+    public void remover() {
         String idUsuario = UserFirebase.getIdUsuario();
         DatabaseReference anuncioRef = UserFirebase.getFirebase()
                 .child("meus_anuncios")
@@ -52,7 +96,7 @@ public class Pet implements Serializable {
                 .child(getIdPet());
     }
 
-    private void removerAnuncioPublico(){
+    private void removerAnuncioPublico() {
         DatabaseReference anuncioRef = UserFirebase.getFirebase()
                 .child("anuncios")
                 .child(getEstado())

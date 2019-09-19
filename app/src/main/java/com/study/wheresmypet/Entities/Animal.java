@@ -21,6 +21,8 @@ public class Animal {
         Image = image;
     }
 
+    public Animal() {}
+
     public String getName() {
         return Name;
     }

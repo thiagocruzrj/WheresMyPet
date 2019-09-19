@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
 import android.util.Log;
@@ -45,6 +46,8 @@ import com.study.wheresmypet.model.Pet;
 import java.util.ArrayList;
 import java.util.List;
 
+import dmax.dialog.SpotsDialog;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -59,6 +62,7 @@ public class NewPetFragment extends Fragment implements View.OnClickListener{
     private static final int GALERY_SELECT = 200;
     private Pet pet;
     private StorageReference storage;
+    private AlertDialog dialog;
 
 
     private String[] permissoes = new String[]{
@@ -66,6 +70,7 @@ public class NewPetFragment extends Fragment implements View.OnClickListener{
     };
 
     private List<String> listaFotosRecuperadas = new ArrayList<>();
+    private List<String> listUrlFotos = new ArrayList<>();
 
     public NewPetFragment() {
         // Required empty public constructor
@@ -108,6 +113,14 @@ public class NewPetFragment extends Fragment implements View.OnClickListener{
     }
 
     public void salvarAnuncioPet(){
+
+        dialog = new SpotsDialog.Builder()
+                .setContext(getContext())
+                .setMessage("Salvando Pet")
+                .setCancelable(false)
+                .build();
+        dialog.show();
+
         // Salvando imagens no storage
         for(int i=0; i < listaFotosRecuperadas.size(); i++){
             String urlImagem = listaFotosRecuperadas.get(i);
@@ -116,7 +129,7 @@ public class NewPetFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    private void salvarFotoStorage(String urlString, int totalFotos, int contador) {
+    private void salvarFotoStorage(String urlString, final int totalFotos, int contador) {
         // Criando nó no storage
         StorageReference imagemPet = storage.child("imagens")
                 .child("pets")
@@ -130,6 +143,17 @@ public class NewPetFragment extends Fragment implements View.OnClickListener{
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Task<Uri> url = taskSnapshot.getStorage().getDownloadUrl();
                 String urlConvertida = url.toString();
+                listUrlFotos.add(urlConvertida);
+
+                if( totalFotos == listUrlFotos.size() ){
+                    pet.setFotos(listUrlFotos);
+                    pet.salvar();
+
+                    dialog.dismiss();
+                    final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.replace(R.id.buttonNewPet, new FeedFragment(), "FeedFragment");
+                    ft.commit();
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

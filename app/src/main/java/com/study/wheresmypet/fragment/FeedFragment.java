@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.study.wheresmypet.Entities.Animal;
 import com.study.wheresmypet.R;
 import com.study.wheresmypet.adapter.AnimalAdapter;
+import com.study.wheresmypet.model.Pet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,36 +27,25 @@ import java.util.List;
 public class FeedFragment extends Fragment {
 
     RecyclerView recyclerView;
-    List<Animal> animals = new ArrayList<>();
+    List<Animal> animals;
     AnimalAdapter animalAdapter;
-
-    public FeedFragment() {
-        // Required empty public constructor
-    }
-
+    Pet petModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View piroca = inflater.inflate(R.layout.fragment_feed, container, false);
+        View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
-        animals.add(new Animal(
-                "Renan",
-                "123123123",
-                "teu cu",
-                "gernerfluid",
-                "mobile",
-                "sofrendo",
-                "com.google.android.gms.tasks.zzu@14c2d46"));
+        animals = new ArrayList<>();
+        petModel = new Pet();
+        recyclerView = view.findViewById(R.id.feed_recicle_view);
+        animalAdapter = new AnimalAdapter(new ArrayList<Pet>());
 
-
-        recyclerView = piroca.findViewById(R.id.feed_recicle_view);
-        animalAdapter = new AnimalAdapter(animals);
 
         carregar();
 
-        return piroca;
+        return view;
     }
 
 
@@ -63,10 +54,13 @@ public class FeedFragment extends Fragment {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(layoutManager);
 
+            petModel.loadPets(animalAdapter);
             recyclerView.setAdapter(animalAdapter);
         } catch (
                 Exception e) {
-//            Toast.makeText(this, "Erro : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.w("test", e.getMessage());
+
+            Toast.makeText(getActivity(), "Erro : " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

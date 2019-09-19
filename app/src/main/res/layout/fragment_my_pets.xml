@@ -6,12 +6,9 @@
     tools:context=".fragment.MyPetsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="My Pets"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:textStyle="bold" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/my_pets_recicleview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </FrameLayout>
